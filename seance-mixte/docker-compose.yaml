@@ -1,0 +1,35 @@
+---
+version: '3.8'
+
+services:
+  user:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    ports:
+      - "3203:3203"
+    depends_on:
+      - movie
+      - showTime
+  movie:
+    build:
+      context: ./movie
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+
+  showTime:
+    build:
+      context: ./showTime
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+
+  booking:
+    build:
+      context: ./booking
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    depends_on:
+      - showTime

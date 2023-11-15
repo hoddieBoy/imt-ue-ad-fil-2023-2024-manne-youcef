@@ -1,0 +1,6 @@
+
+rpython:S116"VRename this field "GetAllSchedule" to match the regular expression ^[_a-z][_a-z0-9]*$.(æä«–ıÿÿÿÿ
+Gpython:S1172"/Remove the unused function parameter "request".(Õó
+ipython:S100"RRename method "GetAllSchedule" to match the regular expression ^[a-z_][a-z0-9_]*$.(Õó
+ypython:S1542""aRename function "add_TimesServicer_to_server" to match the regular expression ^[a-z_][a-z0-9_]*$.(‘£Æ
+hpython:S1004"RRename method "GetAllSchedule" to match the regular expression ^[a-z_][a-z0-9_]*$.(¥™w
