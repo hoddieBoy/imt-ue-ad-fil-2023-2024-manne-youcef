@@ -11,7 +11,7 @@ RUN pip install -r requirements.txt
 ADD . /app/
 
 # generate proto files
-RUN python -m grpc_tools.protoc -I. --python_out=./protos --grpc_python_out=. booking.proto
+RUN python -m grpc_tools.protoc -I=./protos --python_out=. --grpc_python_out=. booking.proto
 
 # run server
 CMD ["python","-u","booking.py"]

@@ -3,25 +3,30 @@ help: ## Display this current help
 
 ##@ General
 
-.PHONY: build start
-
 build: ## Build the project
-    @echo "Building the project..."
-    @docker compose build
+	@echo "Building the project..."
+	docker compose build --no-cache
 
 start: ## Start the project
-    @echo "Starting the project..."
-    @docker compose up -d
+	@echo "Starting the project..."
+	docker compose up -d
 
-stop: ## Stop the project
-    @echo "Stopping the project..."
-    @docker compose down
+restart: ## Restart the project
+	@echo "Restarting the project..."
+	docker compose restart
 
-reload: stop start ## Reload the project
-    @echo "Reloading the project..."
+clean: ## Clean the project
+	@echo "Cleaning the project..."
+	docker compose down -v --remove-orphans
 
-## Reload a specific service
-reload-%: ## Reload a specific service
-    @echo "Reloading the project..."
-    @docker compose restart $*
+start-%: ## Start a specific service
+	@echo "Starting the service $*..."
+	@docker compose up -d $*
 
+stop-%: ## Stop a specific service
+	@echo "Stopping the service $*..."
+	@docker compose stop $*
+
+restart-%: ## Restart a specific service
+	@echo "Restarting the service $*..."
+	@docker compose restart $*

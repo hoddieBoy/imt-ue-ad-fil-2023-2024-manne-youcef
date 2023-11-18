@@ -15,6 +15,10 @@ tags:
   - name: developers
     description: Operations available to regular developers
 
+servers:
+  - url: http://localhost:3004
+    description: Local server
+
 paths:
   /user:
     post:
@@ -28,19 +32,37 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserFormData'
+
       responses:
-        "200":
+        "201":
           description: User created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserFormData'
+                type: object
+                required:
+                  - message
+                  - data
+                properties:
+                  message:
+                    type: string
+                    example: User created
+                  data:
+                    $ref: '#/components/schemas/User'
         "400":
           description: bad input parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFormError'
         "409":
           description: User already exists
-  
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFormData'
+
   /user/list:
     get:
       tags:
@@ -139,153 +161,6 @@ paths:
         "404":
           description: User not found
 
-  /user/{user_id}/bookings:
-    get:
-      tags:
-        - developers
-      summary: get the bookings from a user id
-      description: By passing in the appropriate options, you can get bookings of a user
-      operationId: get_booking_for_user
-      parameters:
-        - name: user_id
-          in: path
-          description: User ID.
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: bookings of a user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AllBookings'
-        "503":
-          description: Service unavailable
-    
-    post:
-      tags:
-        - admins
-      summary: add a booking for a user
-      description: By passing in the appropriate options, you can add a booking for a user
-      operationId: add_booking_for_user
-      parameters:
-        - name: user_id
-          in: path
-          description: User ID.
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: item to add
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Booking'
-      responses:
-        "200":
-          description: Booking created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Booking'
-        "400":
-          description: bad input parameter
-        "404":
-          description: User not found
-        "409":
-          description: Booking already exists
-
-  /user/{user_id}/movies:
-    get:
-      tags:
-        - developers
-      summary: get movies reserved by a user by ID
-      description: By passing in the appropriate options, you can get movies reserved by a user by ID
-      operationId: get_movies_for_user
-      parameters:
-        - name: user_id
-          in: path
-          description: User ID.
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: movies reserved by a user by ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AllMovies'
-        "404":
-          description: User not found
-        "400":
-          description: bad input parameter
-
-  /user/{user_id}/movies/{movie_id}:
-    get:
-      tags:
-        - developers
-      summary: get movie reserved by a user by ID
-      description: By passing in the appropriate options, you can get movie reserved by a user by ID
-      operationId: get_movie_for_user
-      parameters:
-        - name: user_id
-          in: path
-          description: User ID.
-          required: true
-          schema:
-            type: string
-        - name: movie_id
-          in: path
-          description: Movie ID.
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: movie reserved by a user by ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Movie'
-        "404":
-          description: User or Movie not found
-        "400":
-          description: bad input parameter
-
-  /user/{user_id}/movies/{movie_id}/bookings:
-    get:
-      tags:
-        - developers
-      summary: get array of booking's date for a movie reserved by a user by ID
-      description: By passing in the appropriate options, you can get array of booking's date for a movie reserved by a user by ID
-      operationId: get_bookings_for_user
-      parameters:
-        - name: user_id
-          in: path
-          description: User ID.
-          required: true
-          schema:
-            type: string
-        - name: movie_id
-          in: path
-          description: Movie ID.
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: booking's date for a movie reserved by a user by ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AllDates'
-        "404":
-          description: User or Movie not found
-        "400":
-          description: bad input parameter
-
 components:
   schemas:
     User:
@@ -293,7 +168,7 @@ components:
       required:
         - id
         - name
-        -last_active
+        - last_active
       properties:
         id:
           type: string
@@ -304,7 +179,7 @@ components:
         last_active:
           type: string
           example: "2017-07-21T17:32:28Z"
-    
+
     UserFormData:
       type: object
       required:
@@ -318,67 +193,33 @@ components:
           type: string
           example: Rivers
 
+    UserFormError:
+      type: object
+      required:
+        - errors
+        - message
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            optional:
+              - first_name
+              - last_name
+            properties:
+              first_name:
+                type: string
+                example: "First name is required"
+              last_name:
+                type: string
+                example: "Last name is required"
+
+        message:
+          type: string
+          example: "Validation Failed"
+
+
     AllUsers:
       type: array
       items:
         $ref: '#/components/schemas/User'
-    
-    Booking:
-      type: object
-      required:
-        - dates
-        - userid
-      type: object
-      properties:
-        userid:
-          type: string
-          example: chris_rivers
-        dates:
-          type: array
-          items:
-            $ref: '#/components/schemas/DateItem'
-    DateItem:
-      required:
-        - date
-        - movies
-      type: object
-      properties:
-        date:
-          type: string
-          example: "20151201"
-        movies:
-          type: array
-          items:
-            type: string
-            example: 276c79ec-a26a-40a6-b3d3-fb242a5947b6
-    
-    AllBookings:
-      type: array
-      items:
-        $ref: '#/components/schemas/Booking'
-    
-    Movie:
-      type: object
-      required:
-        - title
-        - rating
-        - director
-        - id
-      properties:
-        title:
-          type: string
-          example: The Martian
-        rating:
-          type: integer
-          example: 7
-        director:
-          type: string
-          example: Paul McGuigan
-        id:
-          type: string
-          example: 39ab85e5-5e8e-4dc5-afea-65dc368bd7ab
-    
-    AllMovies:
-      type: array
-      items:
-        $ref: '#/components/schemas/Movie'

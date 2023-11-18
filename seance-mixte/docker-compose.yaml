@@ -7,10 +7,10 @@ services:
       context: ./user
       dockerfile: Dockerfile
     ports:
-      - "3203:3203"
-    depends_on:
-      - movie
-      - showTime
+      - "3004:3004"
+    volumes:
+      - ./user:/usr/src/app
+
   movie:
     build:
       context: ./movie
@@ -18,18 +18,9 @@ services:
     ports:
       - "3001:3001"
 
-  showTime:
+  show-time:
     build:
-      context: ./showTime
+      context: ./showtime
       dockerfile: Dockerfile
     ports:
       - "3002:3002"
-
-  booking:
-    build:
-      context: ./booking
-      dockerfile: Dockerfile
-    ports:
-      - "3003:3003"
-    depends_on:
-      - showTime

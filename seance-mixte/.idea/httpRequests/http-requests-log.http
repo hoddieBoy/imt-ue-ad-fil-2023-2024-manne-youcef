@@ -1,0 +1,36 @@
+GET http://localhost:3004/user/list
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-18T140108.200.json
+
+###
+
+GET http://localhost:3004/user/peter_curley/movie/list
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-17T090400.500.html
+
+###
+
+GET http://localhost:3004/user/peter_curley/movie/list
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-17T090224.500.html
+
+###
+
+GET http://localhost:3004/user/peter_curley/movie/list
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-17T085834.500.html
+
+###
+
