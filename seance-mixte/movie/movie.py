@@ -19,6 +19,11 @@ query.set_field('movie_with_title', r.movie_with_title)
 query.set_field('all_movies', r.all_movies)
 mutation = MutationType()
 mutation.set_field('add_movie', r.add_movie)
+mutation.set_field('add_actor', r.add_actor)
+mutation.set_field('add_movie_to_actor', r.add_movie_to_actor)
+mutation.set_field('delete_movie_from_actor', r.remove_movie_from_actor)
+mutation.set_field('delete_actor', r.delete_actor)
+mutation.set_field('delete_movie', r.delete_movie)
 schema = make_executable_schema(type_defs, movie, actor, query, mutation)
 
 

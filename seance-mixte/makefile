@@ -11,9 +11,8 @@ start: ## Start the project
 	@echo "Starting the project..."
 	docker compose up -d
 
-restart: ## Restart the project
+restart: build start ## Restart the project
 	@echo "Restarting the project..."
-	docker compose restart
 
 clean: ## Clean the project
 	@echo "Cleaning the project..."
@@ -29,4 +28,5 @@ stop-%: ## Stop a specific service
 
 restart-%: ## Restart a specific service
 	@echo "Restarting the service $*..."
-	@docker compose restart $*
+	@docker compose build --no-cache $*
+	@docker compose up -d $*

@@ -58,10 +58,6 @@ paths:
                 $ref: '#/components/schemas/UserFormError'
         "409":
           description: User already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserFormData'
 
   /user/list:
     get:
@@ -100,8 +96,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        "400":
-          description: bad input parameter
         "404":
           description: User not found
     
@@ -123,16 +117,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserFormData'
       responses:
         "200":
           description: user's detail updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                required:
+                  - message
+                  - data
+                properties:
+                  message:
+                    type: string
+                    example: User updated
+                  data:
+                    $ref: '#/components/schemas/User'
         "400":
           description: bad input parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFormError'
         "404":
           description: User not found
     
@@ -156,10 +163,181 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        "400":
-          description: bad input parameter
         "404":
           description: User not found
+
+  /{user_id}/movies:
+    get:
+      tags:
+        - developers
+      summary: get full JSON database of available movies
+      description: By passing in the appropriate options, you can get full JSON database of available movies
+      operationId: get_movies
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: all movies available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllMovies'
+          "400":
+            description: bad input parameter
+
+          "500":
+            description: internal server error
+
+    post:
+      tags:
+        - admins
+      summary: add a movie
+      description: By passing in the appropriate options, you can add a movie
+      operationId: add_movie
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: item to add
+        content:
+          application/json:
+            schema:
+            $ref: '#/components/schemas/MovieFormData'
+
+      responses:
+        "201":
+          description: Movie created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - data
+                properties:
+                  message:
+                    type: string
+                    example: Movie created
+                  data:
+                    $ref: '#/components/schemas/Movie'
+          "400":
+            description: bad input parameter
+            content:
+              application/json:
+              schema:
+                $ref: '#/components/schemas/MovieFormError'
+          "409":
+            description: Movie already exists
+
+
+  /{user_id}/movies/{movie_id}:
+    get:
+      tags:
+        - developers
+      summary: get movie's detail from its id
+      description: By passing in the appropriate options, you can get movie's detail
+      operationId: get_movie_detail
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID.
+          required: true
+          schema:
+            type: string
+        - name: movie_id
+          in: path
+          description: Movie ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: movie's detail
+          content:
+            application/json:
+              schema:
+              $ref: '#/components/schemas/Movie'
+
+        "404":
+          description: Movie not found
+
+    delete:
+      tags:
+        - admins
+      summary: delete movie's detail from its id
+      description: By passing in the appropriate options, you can delete movie's detail
+      operationId: delete_movie_detail
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID.
+          required: true
+          schema:
+            type: string
+        - name: movie_id
+          in: path
+          description: Movie ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: movie's detail deleted
+
+        "400":
+          description: bad input parameter
+
+  /{user_id}/movies/{movie_id}/rating/{rating}:
+    put:
+      tags:
+        - developers
+      summary: rate a movie
+      description: By passing in the appropriate options, you can rate a movie
+      operationId: rate_movie
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID.
+          required: true
+          schema:
+            type: string
+        - name: movie_id
+          in: path
+          description: Movie ID.
+          required: true
+          schema:
+            type: string
+        - name: rating
+          in: path
+          description: Rating.
+          required: true
+          schema:
+            type: float
+      responses:
+        "200":
+          description: movie's detail
+          content:
+            application/json:
+              schema:
+              $ref: '#/components/schemas/Movie'
+
+        "404":
+          description: Movie not found
+
+        "400":
+          description: bad input parameter
+
+        "500":
+          description: internal server error
 
 components:
   schemas:
@@ -223,3 +401,107 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/User'
+
+    Movie:
+      type: object
+      required:
+        - id
+        - title
+        - director
+        - rating
+      optional:
+        - actors
+      properties:
+        id:
+          type: string
+          example: 6e8bc430-9c3a-11d9-9669-0800200c9a66
+        title:
+          type: string
+          example: The Shawshank Redemption
+        director:
+          type: string
+          example: Frank Darabont
+        rating:
+          type: float
+          example: 9.3
+        actors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Actor'
+
+    MovieFormData:
+      type: object
+      required:
+        - title
+        - director
+        - rating
+      properties:
+        title:
+          type: string
+          example: The Shawshank Redemption
+        director:
+          type: string
+          example: Frank Darabont
+        rating:
+          type: float
+          example: 9.3
+
+    MovieFormError:
+      type: object
+      required:
+        - errors
+        - message
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            optional:
+              - title
+              - director
+              - rating
+            properties:
+            title:
+              type: string
+              example: "Title is required"
+            director:
+              type: string
+              example: "Director is required"
+            rating:
+              type: string
+              example: "Rating is required"
+
+        message:
+          type: string
+          example: "Validation Failed"
+
+    AllMovies:
+      type: array
+      items:
+        $ref: '#/components/schemas/Movie'
+
+    Actor:
+      type: object
+      required:
+        - id
+        - firstname
+        - lastname
+        - birthday
+        - films
+      properties:
+        id:
+          type: string
+          example: 6e8bc430-9c3a-11d9-9669-0800200c9a66
+        firstname:
+          type: string
+          example: Morgan
+        lastname:
+          type: string
+          example: Freeman
+        birthday:
+          type: integer
+          example: 1937
+        films:
+          type: array
+          items:
+            $ref: '#/components/schemas/Movie'

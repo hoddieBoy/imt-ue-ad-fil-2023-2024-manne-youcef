@@ -1,6 +1,7 @@
 # Importation de datetime pour récupérer la date et l'heure actuelle
 import datetime
 import json
+import uuid
 
 import requests
 from flask import Flask, request, jsonify, make_response, Response
@@ -21,10 +22,19 @@ def update_user_last_active(user_id):
     :param user_id: id of the user
     :return: None
     """
-    index = users.index(user_id)
+    for user in users:
+        if user["id"] == user_id:
+            user["last_active"] = str(int(datetime.datetime.now().timestamp()))
+            save_users()
+            break
 
-    if index != -1:
-        users[index]["last_active"] = str(datetime.datetime.now().timestamp())
+def save_users():
+    """
+    Save the users in the database
+    :return: None
+    """
+    with open('{}/data/users.json'.format("."), "w") as users_file:
+        json.dump({"users": users}, users_file)
 
 
 @app.route("/", methods=['GET'])
@@ -48,33 +58,31 @@ def add_user() -> Response:
 
     # String vide ou non présent
     if "first_name" not in data or data["first_name"].strip() == "":
-        errors.append({"first_name": "Missing field"})
+        errors.append({"first_name": "first name must not be empty"})
 
     if "last_name" not in data or data["last_name"].strip() == "":
-        errors.append({"last_name": "Missing field"})
+        errors.append({"last_name": "last name must not be empty"})
 
     if errors:
         return make_response(jsonify({"errors": errors, "message": "Invalid data"}), 400)
 
     # id de l'utilisateur
-    user_id = (data["first_name"] + "_" + data["last_name"]).lower()
+    user_id = str(uuid.uuid4())
 
     # Verification si l'id est dans la base de donnees
     for user in users:
         if user["id"] == user_id:
-            return make_response(jsonify({"error": "User already exists"}), 400)
+            return make_response(jsonify({"error": "User already exists"}), 409)
 
     user = {
         "id": user_id,
         "name": data["first_name"] + " " + data["last_name"],
-        "last_active": str(datetime.datetime.now().timestamp())
+        "last_active": str(int(datetime.datetime.now().timestamp()))
     }
 
     users.append(user)
 
-    # Mis à jour de la base de données
-    with open('{}/data/users.json'.format("."), "w") as jsf:
-        json.dump({"users": users}, jsf)
+    save_users()
 
     return make_response(jsonify({"message": "User added", "data": user}), 201)
 
@@ -104,20 +112,23 @@ def update_user(user_id):
     # Vérification de la validité des données
     errors = []
 
-    if "firstname" not in data:
-        errors.append({"firstname": "Missing field"})
+    if "first_name" not in data:
+        errors.append({"first_name": "first name must not be empty"})
 
-    if "lastname" not in data:
-        errors.append({"lastname": "Missing field"})
+    if "last_name" not in data:
+        errors.append({"last_name": "last name must not be empty"})
 
     if errors:
-        return make_response(jsonify({"errors": errors}), 400)
+        return make_response(jsonify({"errors": errors, "message": "Invalid data"}), 400)
 
     # Verification si l'id est dans la base de donnees
     for user in users:
         if user["id"] == user_id:
-            user["name"] = data["firstname"] + " " + data["lastname"]
+            user["name"] = data["first_name"] + " " + data["last_name"]
+            user["last_active"] = str(int(datetime.datetime.now().timestamp()))
             return make_response(jsonify({"message": "User updated", "user": user}), 200)
+
+    save_users()
 
     return make_response(jsonify({"error": "User not found"}), 404)
 
@@ -128,9 +139,118 @@ def delete_user(user_id):
     for user in users:
         if user["id"] == user_id:
             users.remove(user)
+
+            save_users()
+
             return make_response(jsonify({"message": "User deleted"}), 200)
 
     return make_response(jsonify({"error": "User not found"}), 404)
+
+
+##################### Graphql on Movie service #####################
+@app.route("/<user_id>/movies", methods=['GET'])
+def get_movies(user_id) -> Response:
+    """
+    Get all the movies
+    :return: Response object with all the movies
+    """
+    update_user_last_active(user_id)
+
+    query = """
+    {
+      all_movies {
+        id
+        title
+        director
+        rating
+      }   
+    }
+    """
+
+    response = requests.post("http://movie:3001/graphql", json={"query": query})
+
+    if response.status_code == 200:
+        return make_response(jsonify(response.json()["data"]["all_movies"]), 200)
+
+    return make_response(response.json(), response.status_code)
+
+@app.route("/<user_id>/movies/<movie_id>", methods=['GET'])
+def get_movie(user_id, movie_id) -> Response:
+    """
+    Get a movie by id
+
+    :param user_id: id of the user
+    :param movie_id: id of the movie
+
+    :return: Response object with the movie
+    """
+    update_user_last_active(user_id)
+
+    query = """
+    {
+      movie_with_id(_id: "%s") {
+        id
+        title
+        director
+        rating
+        actors {
+          id
+          firstname
+          lastname
+        }
+      }   
+    }
+    """ % movie_id
+
+    response = requests.post("http://movie:3001/graphql", json={"query": query})
+
+    if response.status_code == 200:
+        response = response.json()["data"]["movie_with_id"]
+
+        if response:
+            return make_response(jsonify(response), 200)
+
+        return make_response(jsonify({"error": "Movie not found"}), 404)
+
+    return make_response(response.json(), response.status_code)
+
+@app.route("/<user_id>/movies/<movie_id>/rating/<rating>", methods=['PUT'])
+def update_movie_rating(user_id, movie_id, rating) -> Response:
+    """
+    Update the rating of a movie
+
+    :param user_id: id of the user
+    :param movie_id: id of the movie
+    :param rating: new rating
+
+    :return: Response object with the movie
+    """
+    update_user_last_active(user_id)
+
+    mutation = """
+    mutation {
+      update_movie(_id: "%s", rating: %s) {
+        id
+        title
+        director
+        rating
+      }
+    }
+    """ % (movie_id, rating)
+
+    response = requests.post("http://movie:3001/graphql", json={"query": mutation})
+
+    if response.status_code == 200:
+        response = response.json()["data"]["update_movie"]
+
+        if response:
+            return make_response(jsonify(response), 200)
+
+        return make_response(jsonify({"error": "Movie not found"}), 404)
+
+    return make_response(response.json(), response.status_code)
+
+
 
 if __name__ == "__main__":
     print("Server running in port %s" % PORT)

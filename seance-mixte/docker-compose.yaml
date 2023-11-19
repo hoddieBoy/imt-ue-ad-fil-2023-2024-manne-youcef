@@ -8,8 +8,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3004:3004"
-    volumes:
-      - ./user:/usr/src/app
 
   movie:
     build:
@@ -17,10 +15,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
-
-  show-time:
-    build:
-      context: ./showtime
-      dockerfile: Dockerfile
-    ports:
-      - "3002:3002"

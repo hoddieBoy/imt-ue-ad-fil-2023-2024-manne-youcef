@@ -1,4 +1,4 @@
-FROM python:3.8-alpine
+FROM --platform=linux/x86_64 python:3.8-alpine
 
 # set environment variables
 WORKDIR /app
