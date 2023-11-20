@@ -1,3 +1,5 @@
 
-spython:S1192^"ODefine a constant instead of duplicating this literal "User not found" 3 times.(š¹Âúşÿÿÿÿ8›Äğ“¾1
-mpython:S11923"NDefine a constant instead of duplicating this literal "Missing field" 4 times.(ğ±³÷8œÄğ“¾1
+python:S1192°"ZDefine a constant instead of duplicating this literal "http://movie:3001/graphql" 4 times.(õÇê³ùÿÿÿÿ8 ÷Âò¾1
+spython:S1192l"ODefine a constant instead of duplicating this literal "User not found" 4 times.(š¹Âúşÿÿÿÿ8 ÷Âò¾1
+lpython:S1192I"MDefine a constant instead of duplicating this literal "Invalid data" 3 times.(Ìã¿á8 ÷Âò¾1
+kpython:S1192<"LDefine a constant instead of duplicating this literal "Bad request" 3 times.(îò‡Š8 ÷Âò¾1

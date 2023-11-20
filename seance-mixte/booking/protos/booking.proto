@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 service Booking {
-  rpc GetBookings(Empty) returns (stream BookingData);
+  rpc GetBookings(Empty) returns (BookingList);
   rpc GetBookingByUserId(UserId) returns (BookingData);
   rpc AddBooking(BookingData) returns (BookingData);
 }
@@ -18,6 +18,10 @@ message UserId {
 }
 
 message BookingData {
-  UserId userid = 1;
-  BookingDate dates = 2;
+  string userid = 1;
+  repeated BookingDate dates = 2;
+}
+
+message BookingList {
+  repeated BookingData bookings = 1;
 }

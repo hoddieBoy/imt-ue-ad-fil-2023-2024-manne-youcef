@@ -339,6 +339,33 @@ paths:
         "500":
           description: internal server error
 
+  /{user_id}/bookings:
+    get:
+      tags:
+        - developers
+      summary: get full JSON database of user's bookings
+      description: By passing in the appropriate options, you can get full JSON database of user's bookings
+      operationId: get_bookings
+      parameters:
+        - name: user_id
+          in: path
+          description: User ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: all bookings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllBookings'
+          "400":
+            description: bad input parameter
+
+          "500":
+            description: internal server error
+
 components:
   schemas:
     User:
@@ -505,3 +532,38 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Movie'
+
+    Booking:
+      type: object
+      required:
+        - userid
+        - dates
+      properties:
+        userid:
+          type: string
+          example: 6e8bc430-9c3a-11d9-9669-0800200c9a66
+        dates:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingDate'
+
+    BookingDate:
+      type: object
+      required:
+        - date
+        - movies
+      properties:
+        date:
+          type: string
+          example: 2021-05-01
+        movies:
+          type: array
+          items:
+            type: string
+            example: 6e8bc430-9c3a-11d9-9669-0800200c9a66
+
+    AllBookings:
+        type: array
+        items:
+            $ref: '#/components/schemas/Booking'
+

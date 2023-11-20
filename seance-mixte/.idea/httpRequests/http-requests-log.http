@@ -1,3 +1,387 @@
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T201124.200.json
+
+###
+
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T200931.200.html
+
+###
+
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T191302.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T190935.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T190154.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T185959.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T185702.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T185455.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T185302.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-20T183746.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/movies/720d006c-3a57-4b6a-b18f-9b713b073f3
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T222412.200.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies/720d006c-3a57-4b6a-b18f-9b713b073f3
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T222403.200.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies/720d006c-3a57-4b6a-b18f-9b713b073f3c
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T201133.200.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies/720d006c-3a57-4b6a-b18f-9b713b073f3c
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T200811.200.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies/720d006c-3a57-4b6a-b18f-9b713b073f3c
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T200451.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/movies/720d006c-3a57-4b6a-b18f-9b713b073f3c
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T200317.400.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies/720d006c-3a57-4b6a-b18f-9b713b073f3c
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T195715.500.html
+
+###
+
+GET http://localhost:3004/user/list
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T190018.200.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T185847.200.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T185458.400.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T185306.200.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T174501.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T174228.200.json
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T174042.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T173618.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T170102.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T164535.500.html
+
+###
+
+GET http://localhost:3004/garret_heaton/movies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T163659.500.html
+
+###
+
+DELETE http://localhost:3004/user/manne_emile_kitsoukou
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T155950.200.json
+
+###
+
+GET http://localhost:3004/user/manne_emile_kitsouko
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T153909.404.json
+
+###
+
+GET http://localhost:3004/user/manne_emile_kitsoukou
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T153904.200.json
+
+###
+
+POST http://localhost:3004/user
+Content-Type: application/json
+Content-Length: 61
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "first_name": "Manne Emile",
+  "last_name": "KITSOUKOU"
+}
+
+<> 2023-11-19T153813.201.json
+
+###
+
+GET http://localhost:3004/user/list
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-11-19T153539.200.json
+
+###
+
+POST http://localhost:3004/user
+Content-Type: application/json
+Content-Length: 61
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "first_name": "Manne Emile",
+  "last_name": "KITSOUKOU"
+}
+
+<> 2023-11-19T153337.201.json
+
+###
+
+POST http://localhost:3004/user
+Content-Type: application/json
+Content-Length: 52
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "first_name": "Chris",
+  "last_name": "Rivers"
+}
+
+<> 2023-11-19T153011.400.json
+
+###
+
+POST http://localhost:3004/user
+Content-Type: application/json
+Content-Length: 41
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "first_name": "",
+  "last_name": ""
+}
+
+<> 2023-11-19T152612.400.json
+
+###
+
+POST http://localhost:3004/user
+Content-Type: application/json
+Content-Length: 41
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "first_name": "",
+  "last_name": ""
+}
+
+<> 2023-11-19T152317.400.json
+
+###
+
+POST http://localhost:3004/user
+Content-Type: application/json
+Content-Length: 41
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "first_name": "",
+  "last_name": ""
+}
+
+<> 2023-11-19T151801.400.json
+
+###
+
 GET http://localhost:3004/user/list
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)

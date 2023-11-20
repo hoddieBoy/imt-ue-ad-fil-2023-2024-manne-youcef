@@ -3,6 +3,7 @@ version: '3.8'
 
 services:
   user:
+    platform: linux/x86_64
     build:
       context: ./user
       dockerfile: Dockerfile

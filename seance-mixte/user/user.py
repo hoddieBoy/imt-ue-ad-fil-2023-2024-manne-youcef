@@ -3,8 +3,14 @@ import datetime
 import json
 import uuid
 
+import google.protobuf.json_format as json_format
+
 import requests
 from flask import Flask, request, jsonify, make_response, Response
+
+import booking_pb2
+import booking_pb2_grpc
+import grpc
 
 app = Flask(__name__)
 
@@ -251,6 +257,81 @@ def update_movie_rating(user_id, movie_id, rating) -> Response:
     return make_response(response.json(), response.status_code)
 
 
+##################### Graphql and gRPC #####################
+@app.route("/<user_id>/bookings", methods=['GET'])
+def get_bookings(user_id) -> Response:
+    """
+    Get all the bookings of a user
+
+    :param user_id: id of the user
+
+    :return: Response object with all the bookings
+    """
+    update_user_last_active(user_id)
+
+    for user in users:
+        if user["id"] == user_id:
+            channel = grpc.insecure_channel('booking:3002')
+            stub = booking_pb2_grpc.BookingStub(channel)
+            response = stub.GetBookingByUserId(booking_pb2.UserId(userid=user_id))
+            return make_response(jsonify(json_format.MessageToDict(response)), 200)
+
+    return make_response(jsonify({"error": "User not found"}), 404)
+
+@app.route("/<user_id>/bookings", methods=['POST'])
+def add_booking(user_id) -> Response:
+    """
+    Add a booking to a user
+
+    :param user_id: id of the user
+
+    :return: Response object with the booking
+    """
+    update_user_last_active(user_id)
+
+    # Récupération des données de la requête
+    data = request.get_json()
+    if data is None:
+        return make_response(jsonify({"error": "Bad request"}), 400)
+
+    # Vérification de la validité des données
+    errors = []
+
+    # String vide ou non présent
+    if "date" not in data or data["date"].strip() == "":
+        errors.append({"date": "date must not be empty"})
+    else:
+        # Vérification de la validité de la date YYYYMMDD
+        try:
+            datetime.datetime.strptime(data["date"], '%Y%m%d')
+        except ValueError:
+            errors.append({"date": "date must be in the format YYYYMMDD"})
+
+    if "movie" not in data or data["movie"].strip() == "":
+        errors.append({"movie": "movie must not be empty"})
+    else:
+        # Vérification de la validité du film
+        query = """
+        {
+          movie_with_id(_id: "%s") {
+            id
+          }   
+        }
+        """ % data["movie"]
+
+        response = requests.post("http://movie:3001/graphql", json={"query": query})
+
+        if response.status_code != 200:
+            errors.append({"movie": "movie not found"})
+
+    if errors:
+        return make_response(jsonify({"errors": errors, "message": "Invalid data"}), 400)
+
+
+    channel = grpc.insecure_channel('booking:3002')
+    stub = booking_pb2_grpc.BookingStub(channel)
+    response = stub.AddBooking(booking_pb2.NewBooking(userid=user_id, date=data["date"], movie=data["movie"]))
+    return make_response(jsonify(json_format.MessageToDict(response)), 201)
 
 if __name__ == "__main__":
     print("Server running in port %s" % PORT)
