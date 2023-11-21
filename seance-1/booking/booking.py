@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response, Response
 import requests
 import json
 import re
@@ -21,7 +21,13 @@ def get_bookings():
    return make_response(jsonify(bookings),200)
 
 @app.route("/bookings/<user_id>", methods=['GET'])
-def get_bookings_byuser(user_id):
+def get_bookings_byuser(user_id: str) -> Response:
+   """
+   Get bookings for a specific user
+   :param user_id: a specific user id
+
+   :return: Response that contains the bookings for a specific user
+   """
    # Verification si l'id est dans la base de donnees
    for booking in bookings:
       if booking["userid"] == user_id:
@@ -30,7 +36,13 @@ def get_bookings_byuser(user_id):
    return make_response(jsonify({"error": "User not found"}), 404)
 
 @app.route("/bookings/<user_id>", methods=['POST'])
-def add_booking(user_id):
+def add_booking(user_id: str) -> Response:
+   """
+    Add a booking for a specific user
+
+   :param str user_id: a specific user id
+   :return:
+   """
    # Récupération des données de l'utilisateur sinon une liste vide
    user_bookings = bookings.get(user_id, {})
    

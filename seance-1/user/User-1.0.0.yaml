@@ -16,7 +16,7 @@ tags:
     description: Operations available to regular developers
 
 servers:
-  - url: http://localhost:3004
+  - url: http://localhost:3203
     description: Local server
 
 paths:

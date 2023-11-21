@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response, Response
 import requests
 import json
 import uuid
+
 
 from werkzeug.exceptions import NotFound
 # Importation de datetime pour récupérer la date et l'heure actuelle
@@ -271,7 +272,7 @@ def get_movie(user_id, movie_id) -> Response:
 
    return requests.get(f"http://movie:3200/movies/{movie_id}")
 
-                       @app.route("/<user_id>/movies/<movie_id>/rating/<rating>", methods=['PUT'])
+@app.route("/<user_id>/movies/<movie_id>/rating/<rating>", methods=['PUT'])
 def update_movie_rating(user_id: str, movie_id: str, rating: str) -> Response:
    """
    Update the rating of a movie and update the user's last active timestamp.

@@ -19,3 +19,13 @@ B
 -.idea/sonarlint/securityhotspotstore/index.pb,8/8/88a9255124c95bdc913197c120a8d560edc59c8e
 S
 #.idea/sonarlint/issuestore/index.pb,9/f/9fe84ebb15faf917b7def6236dba604453cc61e0
+B
+booking/Dockerfile,f/2/f2ae8db534e926744e46532fbb6480bbcc8954b7
+D
+showtime/showtime.py,e/a/ea4f5c9d5d2ff754e277ebe06910ce0781340ffd
+E
+user/requirements.txt,4/e/4edf834e1f3711f66643767963102813084c5d2c
+@
+requirements.txt,1/9/19359a61ae2446b51b549167b014da2fcf265768
+F
+movie/requirements.txt,5/a/5a4d362dfaefa053522df30b50a7f2dea68b5ae9
