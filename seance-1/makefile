@@ -5,13 +5,6 @@ help: ## Display this current help
 
 build: ## Build the project
 	@echo "Building the project..."
-	@echo "copy proto files..."
-	@echo "copy booking proto files to user proto files..."
-	@mkdir -p ./user/protos
-	@cp ./booking/protos/booking.proto ./user/protos/
-	@echo "copy times proto files to booking proto files..."
-	@mkdir -p ./booking/protos
-	@cp ./showtime/protos/showtime.proto ./booking/protos/
 	docker compose build --no-cache
 
 start: ## Start the project

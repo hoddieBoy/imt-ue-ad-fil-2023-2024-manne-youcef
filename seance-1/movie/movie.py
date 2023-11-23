@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response, Response
 import json
 import sys
 from werkzeug.exceptions import NotFound
@@ -27,14 +27,25 @@ def template():
     )
 
 @app.route("/json", methods=['GET'])
-def json():
+def json() -> Response:
+    """
+    Returns a JSON response containing the movies.
+
+    :return: JSON response
+    """
     return make_response(
         jsonify(movies),
         200
     )
 
 @app.route("/movies/<movieid>", methods=['GET'])
-def get_movie(movieid):
+def get_movie(movieid: str) -> Response:
+    """
+    Get the movie with the given movieid.
+
+    :param str movieid: The ID of the movie to retrieve.
+    :return: The movie information as a JSON response.
+    """
     for movie in movies:
         if movie["id"] == movieid:
             return make_response(

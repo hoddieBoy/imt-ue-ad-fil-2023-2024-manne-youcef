@@ -3,33 +3,43 @@ version: '3.8'
 
 services:
   user:
+    platform: linux/x86_64
     build:
       context: ./user
       dockerfile: Dockerfile
     ports:
-      - "3203:3203"
-    depends_on:
-      - movie
-      - showTime
+      - "3004:3004"
+
   movie:
+    platform: linux/x86_64
     build:
       context: ./movie
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
 
-  showTime:
-    build:
-      context: ./showTime
-      dockerfile: Dockerfile
-    ports:
-      - "3002:3002"
-
   booking:
+    platform: linux/x86_64
     build:
       context: ./booking
       dockerfile: Dockerfile
     ports:
+      - "3002:3002"
+
+  showtime:
+    platform: linux/x86_64
+    build:
+      context: ./showtime
+      dockerfile: Dockerfile
+    ports:
       - "3003:3003"
-    depends_on:
-      - showTime
+
+  swagger:
+    platform: linux/x86_64
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./user/User-1.0.0.yaml:/usr/share/nginx/html/user/User-1.0.0.yaml
+    environment:
+      - API_URL=/user/User-1.0.0.yaml
