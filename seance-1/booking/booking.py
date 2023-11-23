@@ -20,6 +20,11 @@ def home():
 
 @app.route("/bookings", methods=['GET'])
 def get_bookings():
+    """
+    Retrieve the list of bookings.
+
+    :return: A response object containing the list of bookings in JSON format.
+    """
     return make_response(jsonify(bookings), 200)
 
 
@@ -45,7 +50,7 @@ def add_booking(user_id: str) -> Response:
      Add a booking for a specific user
 
     :param str user_id: a specific user id
-    :return:
+    :return: Response that contains the bookings for a specific user
     """
     # Récupération des données de l'utilisateur sinon une liste vide
     user_bookings = {}
@@ -67,6 +72,16 @@ def add_booking(user_id: str) -> Response:
         errors.append({"date": "Missing field"})
     elif not re.match(r'^(\d{4})(0[1-9]|1[0-2])(0[1-9]|[1-2]\d|3[0-1])$', data["date"]):
         errors.append({"date": "Invalid date format, expected YYYYMMDD"})
+    else:
+        # Vérification de la date de réservation du film est bien programmée
+        response_showtimes = requests.get(f'http://showtime:3202/showtimes/{data["date"]}')
+        if response_showtimes.status_code == 404:
+            errors.append({"date": "Date not found"})
+        else:
+            showtimes = response_showtimes.json()["showtimes"]
+            if "movie" in data and data["movie"] not in showtimes:
+                errors.append({"movie": "Movie not scheduled for this date"})
+                
 
     if "movie" not in data:
         errors.append({"movie": "Missing field"})
