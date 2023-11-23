@@ -1,9 +1,0 @@
-
-spython:S1192#"ODefine a constant instead of duplicating this literal "User not found" 4 times.(ºÈ€Ñûÿÿÿÿ8í‹¿1
-lpython:S1192^"MDefine a constant instead of duplicating this literal "Invalid data" 3 times.(Ìã¿á8í‹¿1
-kpython:S1192Q"LDefine a constant instead of duplicating this literal "Bad request" 3 times.(îò‡Š8í‹¿1
-‡python:S5886õ"bReturn a value of type "Response" instead of "Response" or update function "get_movies" type hint.(¢¢¦ûÿÿÿÿ8î‹¿1
-†python:S5886‘"aReturn a value of type "Response" instead of "Response" or update function "get_movie" type hint.(óÕŒäıÿÿÿÿ8î‹¿1
-python:S5886·"kReturn a value of type "Response" instead of "Response" or update function "update_movie_rating" type hint.(é†êÅùÿÿÿÿ8î‹¿1
-„python:S5886Ì"dReturn a value of type "Response" instead of "Response" or update function "get_bookings" type hint.(âò8î‹¿1
-ˆpython:S5886Œ"cReturn a value of type "Response" instead of "Response" or update function "add_booking" type hint.(‹áèÿÿÿÿÿ8î‹¿1
