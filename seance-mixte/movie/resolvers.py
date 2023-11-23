@@ -98,19 +98,33 @@ def add_movie(_, info, title, director, rating):
     if movie_with_title(_, info, title):
         return False
 
-    movies.append({
+    movie = {
         "id": str(uuid.uuid4()),
         "title": title,
         "director": director,
         "rating": rating
-    })
+    }
+
+    movies.append(movie)
 
     save_movies()
 
-    return True
+    return movie
 
 
 def add_actor(_, info, firstname, lastname, birthday):
+    """
+    Add an actor to the database
+
+    Parameters
+    ----------
+    :param _:
+    :param info:
+    :param firstname:
+    :param lastname:
+    :param birthday:
+    :return:
+    """
     if not firstname or not lastname or not birthday:
         return False
 
@@ -128,6 +142,17 @@ def add_actor(_, info, firstname, lastname, birthday):
 
 
 def add_movie_to_actor(_, info, actor_id, movie_id):
+    """
+    Add a movie to an actor's filmography
+
+    Parameters
+    ----------
+    :param _:
+    :param info:
+    :param actor_id:
+    :param movie_id:
+    :return:
+    """
     for actor in actors:
         if actor['id'] == actor_id:
             # check if movie is already in list
@@ -139,6 +164,17 @@ def add_movie_to_actor(_, info, actor_id, movie_id):
 
 
 def remove_movie_from_actor(_, info, actor_id, movie_id):
+    """
+    Remove a movie from an actor's filmography
+
+    Parameters
+    ----------
+    :param _:
+    :param info:
+    :param actor_id:
+    :param movie_id:
+    :return:
+    """
     for actor in actors:
         if actor['id'] == actor_id:
             # check if movie is already in list
@@ -149,7 +185,16 @@ def remove_movie_from_actor(_, info, actor_id, movie_id):
     return False
 
 
-def resolve_actors_in_movie(_, info, movie):
+def resolve_actors_in_movie(movie, info):
+    """
+    Retrieve all actors playing in a movie
+
+    Parameters
+    ----------
+    :param movie:
+    :param info:
+    :return:
+    """
     actors_in_movie = []
     for actor in actors:
         if movie['id'] in actor['films']:
@@ -158,6 +203,16 @@ def resolve_actors_in_movie(_, info, movie):
 
 
 def delete_actor(_, info, _id):
+    """
+    Delete an actor from the database
+
+    Parameters
+    ----------
+    :param _:
+    :param info:
+    :param _id:
+    :return:
+    """
     for actor in actors:
         if actor["id"] == _id:
             actors.remove(actor)
@@ -170,6 +225,16 @@ def delete_actor(_, info, _id):
 
 
 def delete_movie(_, info, _id):
+    """
+    Delete a movie from the database
+
+    Parameters
+    ----------
+    :param _:
+    :param info:
+    :param _id:
+    :return:
+    """
     for movie in movies:
         if movie["id"] == _id:
             movies.remove(movie)
@@ -188,6 +253,19 @@ def delete_movie(_, info, _id):
 
 
 def update_movie(_, info, _id, title, director, rating):
+    """
+    Update a movie in the database
+
+    Parameters
+    ----------
+    :param _:
+    :param info:
+    :param _id:
+    :param title:
+    :param director:
+    :param rating:
+    :return:
+    """
     for movie in movies:
         if movie["id"] == _id:
             movie["title"] = title if title else movie["title"]
@@ -196,6 +274,6 @@ def update_movie(_, info, _id, title, director, rating):
 
             save_movies()
 
-            return True
+            return movie
 
     return False

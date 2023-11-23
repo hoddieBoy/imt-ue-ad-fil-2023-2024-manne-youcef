@@ -299,11 +299,6 @@ def get_movie(user_id, movie_id) -> Response:
         title
         director
         rating
-        actors {
-          id
-          firstname
-          lastname
-        }
       }   
     }
     """ % movie_id
@@ -404,7 +399,38 @@ def get_bookings(user_id: str) -> Response:
             channel = grpc.insecure_channel('booking:3002')
             stub = booking_pb2_grpc.BookingStub(channel)
             response = stub.GetBookingByUserId(booking_pb2.UserId(userid=user_id))
-            return make_response(jsonify(json_format.MessageToDict(response)), 200)
+            message = json_format.MessageToDict(response)
+
+            if message:
+                # Appel à movie pour récupérer les détails des films
+                query = """
+                {
+                  all_movies {
+                    id
+                    title
+                    director
+                    rating
+                  }   
+                }
+                """
+
+                response = requests.post("http://movie:3001/graphql", json={"query": query})
+
+                for booking in message["dates"]:
+                    for movie in response.json()["data"]["all_movies"]:
+                        if movie["id"] in booking["movies"]:
+                            booking["movies"].remove(movie["id"])
+                            booking["movies"].append(movie)
+
+                # Mettre à jour les données qui n'ont pas été modifiées en les enrobant dans un dict
+
+                for booking in message["dates"]:
+                    for movie in booking["movies"]:
+                        if type(movie) is str:
+                            booking["movies"].remove(movie)
+                            booking["movies"].append({"id": movie})
+
+                return make_response(jsonify(message), 200)
 
     return make_response(jsonify({"error": "User not found"}), 404)
 

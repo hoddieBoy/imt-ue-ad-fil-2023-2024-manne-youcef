@@ -11,7 +11,7 @@ type Mutation {
     delete_movie_from_actor(actor_id: String!, movie_id: String!): Actor
     delete_actor(_id: String!): Boolean
     delete_movie(_id: String!): Boolean
-    update_movie(_id: String!, director: String!, rating: Float!): Movie
+    update_movie(_id: String!, director: String, rating: Float!): Movie
 }
 
 type Movie {

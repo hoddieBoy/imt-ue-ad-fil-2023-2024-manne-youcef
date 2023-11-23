@@ -211,7 +211,7 @@ paths:
         content:
           application/json:
             schema:
-            $ref: '#/components/schemas/MovieFormData'
+              $ref: '#/components/schemas/MovieFormData'
 
       responses:
         "201":
@@ -269,32 +269,6 @@ paths:
 
         "404":
           description: Movie not found
-
-    delete:
-      tags:
-        - admins
-      summary: delete movie's detail from its id
-      description: By passing in the appropriate options, you can delete movie's detail
-      operationId: delete_movie_detail
-      parameters:
-        - name: user_id
-          in: path
-          description: User ID.
-          required: true
-          schema:
-            type: string
-        - name: movie_id
-          in: path
-          description: Movie ID.
-          required: true
-          schema:
-            type: string
-      responses:
-        "204":
-          description: movie's detail deleted
-
-        "400":
-          description: bad input parameter
 
   /{user_id}/movies/{movie_id}/rating/{rating}:
     put:

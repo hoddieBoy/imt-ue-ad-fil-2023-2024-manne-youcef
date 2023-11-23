@@ -56,27 +56,47 @@ class BookingServicer(booking_pb2_grpc.BookingServicer):
         :param context: gRPC context
         :return:
         """
-        # Check if is already in the db
+        # Check if we can book the movie at this date
+        channel = grpc.insecure_channel('showtime:3003')
+        stub = showtime_pb2_grpc.ShowTimeStub(channel)
+        response = stub.GetScheduleByDate(showtime_pb2.ScheduleDate(date=request.date))
+
+        if request.movie not in response.movies:
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_details("Movie not available at this date")
+            return booking_pb2.BookingData()
+
+        # Check if the user has already booked this movie at this date
+        existing_booking = self._find_existing_booking(request.userid, request.date)
+        if existing_booking:
+            if request.movie in existing_booking["movies"]:
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+                context.set_details("User has already booked this movie at this date")
+                return booking_pb2.BookingData()
+            else:
+                existing_booking["movies"].extend([request.movie])
+                return self._buildBookinData(existing_booking)
+
+        # Create a new booking for the user
+        new_booking = {"userid": request.userid, "dates": [{"date": request.date, "movies": [request.movie]}]}
+        self.db.append(new_booking)
+
+        return self._buildBookinData(new_booking)
+
+    def _find_existing_booking(self, userid, date):
+        """
+        Find an existing booking for a specific user and date.
+
+        :param userid: the user id
+        :param date: the booking date
+        :return: the existing booking if found, None otherwise
+        """
         for booking in self.db:
-            if booking["userid"] == request.userid:
-
-                # Check if date is already in the db
-                for date in booking["dates"]:
-                    if date["date"] == request.date:
-                        date["movies"].extend(request.movie)
-                        return self._buildBookinData(booking)
-                channel = grpc.insecure_channel('showtime:3003')
-                stub = showtime_pb2_grpc.ShowTimeStub(channel)
-                response = stub.GetScheduleByDate(showtime_pb2.Date(date=request.date))
-
-                if len(response.movies) == 0:
-                    return booking_pb2.BookingData()
-
-                booking["dates"].extend([{"date": request.date, "movies": [request.movie]}])
-                return self._buildBookinData(booking)
-        # If not, add it
-        self.db.extend([{"userid": request.userid, "dates": [{"date": request.date, "movies": [request.movie]}]}])
-        return self._buildBookinData(self.db[-1])
+            if booking["userid"] == userid:
+                for booking_date in booking["dates"]:
+                    if booking_date["date"] == date:
+                        return booking_date
+        return None
 
     @staticmethod
     def _buildBookinData(booking):

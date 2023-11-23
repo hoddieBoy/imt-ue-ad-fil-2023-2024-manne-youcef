@@ -32,8 +32,6 @@ def update_user_last_active(user_id: str) -> None:
          save_users()
          break
 
-   raise NotFound("User not found")
-
 import json
 
 def save_users() -> None:
@@ -42,7 +40,7 @@ def save_users() -> None:
 
    :return: None
    """
-   with open('{}/data/users.json'.format("."), "w") as users_file:
+   with open('{}/databases/users.json'.format("."), "w") as users_file:
       json.dump({"users": users}, users_file)
 
 
@@ -242,7 +240,9 @@ def get_movies(user_id: str) -> Response:
    """
    update_user_last_active(user_id)
 
-   return requests.get("http://movie:3200/movies")
+   response = requests.get("http://movie:3200/movies")
+
+   return make_response(jsonify(response.json()), response.status_code)
 
 @app.route("/<user_id>/movies/<movie_id>", methods=['GET'])
 def get_movie(user_id, movie_id) -> Response:
@@ -270,7 +270,9 @@ def get_movie(user_id, movie_id) -> Response:
    """
    update_user_last_active(user_id)
 
-   return requests.get(f"http://movie:3200/movies/{movie_id}")
+   response = requests.get(f"http://movie:3200/movies/{movie_id}")
+
+   return make_response(jsonify(response.json()), response.status_code)
 
 @app.route("/<user_id>/movies/<movie_id>/rating/<rating>", methods=['PUT'])
 def update_movie_rating(user_id: str, movie_id: str, rating: str) -> Response:
@@ -308,7 +310,9 @@ def update_movie_rating(user_id: str, movie_id: str, rating: str) -> Response:
    if not rating.isnumeric() or float(rating) < 0 or float(rating) > 10:
       return make_response(jsonify({"error": "Rating must be a number between 0 and 10"}), 400)
 
-   return requests.put(f"http://movie:3200/movies/{movie_id}/{rating}")
+   response = requests.put(f"http://movie:3200/movies/{movie_id}/rating/{rating}")
+
+   return make_response(jsonify(response.json()), response.status_code)
 
 @app.route("/<user_id>/bookings", methods=['GET'])
 def get_bookings(user_id: str) -> Response:
@@ -329,7 +333,9 @@ def get_bookings(user_id: str) -> Response:
    """
    update_user_last_active(user_id)
 
-   return requests.get(f"http://booking:3201/bookings/{user_id}")
+   response =  requests.get(f"http://booking:3201/bookings/{user_id}")
+
+   return make_response(jsonify(response.json()), response.status_code)
 
 @app.route("/<user_id>/bookings", methods=['POST'])
 def add_booking(user_id) -> Response:
@@ -393,7 +399,9 @@ def add_booking(user_id) -> Response:
       return make_response(jsonify({"errors": errors, "message": "Invalid data"}), 400)
 
    # Ajout de la réservation
-   return requests.post(f"http://booking:3201/bookings/{user_id}", json=data)
+   response = requests.post(f"http://booking:3201/bookings/{user_id}", json=data)
+
+   return make_response(jsonify(response.json()), response.status_code)
 
 
 if __name__ == "__main__":
