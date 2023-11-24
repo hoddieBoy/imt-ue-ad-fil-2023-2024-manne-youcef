@@ -5,7 +5,6 @@ import uuid
 
 
 from werkzeug.exceptions import NotFound
-# Importation de datetime pour récupérer la date et l'heure actuelle
 import datetime
 
 app = Flask(__name__)
@@ -73,40 +72,44 @@ def add_user() -> Response:
    :return: Response object with a message and the id of the user
    """
 
-   # Récupération des données de la requête
+   # Get the request data
    data = request.get_json()
    if data is None:
       return make_response(jsonify({"error": "Bad request"}), 400)
 
-   # Vérification de la validité des données
+   # Check the validity of the data
    errors = []
 
-   # String vide ou non présent
+   # Empty or missing first_name
    if "first_name" not in data or data["first_name"].strip() == "":
       errors.append({"first_name": "first name must not be empty"})
 
+   # Empty or missing last_name
    if "last_name" not in data or data["last_name"].strip() == "":
       errors.append({"last_name": "last name must not be empty"})
 
    if errors:
       return make_response(jsonify({"errors": errors, "message": "Invalid data"}), 400)
 
-   # id de l'utilisateur
+   # Generate a user ID
    user_id = str(uuid.uuid4())
 
-   # Verification si l'id est dans la base de donnees
+   # Check if the ID is already in the database
    for user in users:
       if user["id"] == user_id:
          return make_response(jsonify({"error": "User already exists"}), 409)
 
+   # Create the user object
    user = {
       "id": user_id,
       "name": data["first_name"] + " " + data["last_name"],
       "last_active": str(int(datetime.datetime.now().timestamp()))
    }
 
+   # Add the user to the database
    users.append(user)
 
+   # Save the users to the JSON file
    save_users()
 
    return make_response(jsonify({"message": "User added", "data": user}), 201)
@@ -135,7 +138,7 @@ def get_user(user_id: str) -> Response:
 
    :return: The response containing the user information.
    """
-   # Verification si l'id est dans la base de donnees
+   # Check if the ID is in the database
    for user in users:
       if user["id"] == user_id:
          return make_response(jsonify(user), 200)
@@ -163,12 +166,12 @@ def update_user(user_id: str) -> Response:
    :param str user_id: The ID of the user.
    :return: The response containing the new user information.
    """
-   # Récupération des données de la requête
+   # Get the request data
    data = request.get_json()
    if data is None:
       return make_response(jsonify({"error": "Bad request"}), 400)
 
-   # Vérification de la validité des données
+   # Check the validity of the data
    errors = []
 
    if "first_name" not in data:
@@ -180,7 +183,7 @@ def update_user(user_id: str) -> Response:
    if errors:
       return make_response(jsonify({"errors": errors, "message": "Invalid data"}), 400)
 
-   # Verification si l'id est dans la base de donnees
+   # Check if the ID is in the database
    for user in users:
       if user["id"] == user_id:
          user["name"] = data["first_name"] + " " + data["last_name"]
@@ -209,7 +212,7 @@ def delete_user(user_id: str) -> Response:
 
    :return: The response containing a success message.
    """
-   # Verification si l'id est dans la base de donnees
+   # Check if the user exists
    for user in users:
       if user["id"] == user_id:
          users.remove(user)
@@ -306,7 +309,7 @@ def update_movie_rating(user_id: str, movie_id: str, rating: str) -> Response:
 
    update_user_last_active(user_id)
 
-   # La note doit être un nombre entre 0 et 10
+   # Validate rating
    if not rating.isnumeric() or float(rating) < 0 or float(rating) > 10:
       return make_response(jsonify({"error": "Rating must be a number between 0 and 10"}), 400)
 
@@ -390,17 +393,17 @@ def add_booking(user_id) -> Response:
 
    Notes
    -----
-   This function sends a HTTP request to the booking service and adds a booking
+   This function sends an HTTP request to the booking service and adds a booking.
 
    The function expects a JSON payload with "date" (in YYYYMMDD format) and "movie" fields.
-   It validates the input data and ensures that the movie exists before making the booking
+   It validates the input data and ensures that the movie exists before making the booking.
 
-   If the data is valid(i.e., the movie exists and the date is in correct format and in the future),
-   the booking is added, and a success message is returned(201).
+   If the data is valid (i.e., the movie exists and the date is in the correct format and in the future),
+   the booking is added, and a success message is returned (201).
 
-   If there are validation errors, a 400 error is returned with details about the issues
+   If there are validation errors, a 400 error is returned with details about the issues.
 
-   If the movie is not found, a 400 error is returned with an appropriate error message
+   If the movie is not found, a 400 error is returned with an appropriate error message.
 
    Parameters:
    ----------
@@ -410,23 +413,23 @@ def add_booking(user_id) -> Response:
    """
    update_user_last_active(user_id)
 
-   # Récupération des données de la requête
+   # Get request data
    data = request.get_json()
    if data is None:
       return make_response(jsonify({"error": "Bad request"}), 400)
 
-   # Vérification de la validité des données
+   # Validate data
    errors = []
 
-   # String vide ou non présent
+   # Empty or missing date
    if "date" not in data or data["date"].strip() == "":
       errors.append({"date": "date must not be empty"})
    else:
-      # Vérification de la validité de la date YYYYMMDD
+      # Validate date format (YYYYMMDD)
       try:
          datetime.datetime.strptime(data["date"], '%Y%m%d')
 
-         # Vérification que la date est dans le futur
+         # Check if the date is in the future
          if int(data["date"]) < int(datetime.datetime.now().strftime("%Y%m%d")):
             errors.append({"date": "date must be in the future"})
       except ValueError:
@@ -435,7 +438,7 @@ def add_booking(user_id) -> Response:
    if "movie" not in data or data["movie"].strip() == "":
       errors.append({"movie": "movie must not be empty"})
    else:
-      # Vérification de la validité du film
+      # Validate movie
       response = requests.get(f"http://movie:3200/movies/{data['movie']}")
 
       if response.status_code != 200:
@@ -444,7 +447,7 @@ def add_booking(user_id) -> Response:
    if errors:
       return make_response(jsonify({"errors": errors, "message": "Invalid data"}), 400)
 
-   # Ajout de la réservation
+   # Add the booking
    response = requests.post(f"http://booking:3201/bookings/{user_id}", json=data)
 
    return make_response(jsonify(response.json()), response.status_code)
