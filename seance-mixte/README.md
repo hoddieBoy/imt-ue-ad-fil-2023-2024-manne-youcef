@@ -85,4 +85,7 @@ You can use the Makefile to interact with the project. The following commands ar
 
 To use these commands, run `make <command>` in the project root directory.
 
+## Launch the project
 
+For testing purposes, you can use the `make start` command to start the project. This will start all the services and
+expose the user service on port 3004 of your machine and it OpenAPI documentation on port 8080.
