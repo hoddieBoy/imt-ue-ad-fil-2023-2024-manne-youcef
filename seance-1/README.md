@@ -1,4 +1,4 @@
-# API-MIX
+# REST-API
 
 ## Description
 This project consists of several microservices that collectively manage a movie booking system. Each microservice is 
@@ -11,42 +11,39 @@ The booking service is responsible for managing the booking of tickets for movie
 server and client based on the *protobuf* definition both implemented in *Python*. It have a direct access to time service
 
 - `booking/Dockerfile`: Containerization of the booking service
-- `booking/client.py`: Implementation of the booking service server/client
-- `booking/proto/`: Directory containing Protobuf definitions for communication.
+- `booking/booking.py`: Implementation of the booking service
 - `booking/requirements.txt`: Python dependencies for the booking service
 - `booking/data/bookings.json`: JSON file containing booking data.
 
 ### 2. Movie Service
-The movie service is responsible for managing the movies that are available in the system. It is implemented using a
-*GraphQL* server and client based on the *GraphQL* definition both implemented in *Python*.
+The movie service is responsible for managing the movies that are available in the system.
 
 - `movie/Dockerfile`: Containerization of the movie service
-- `movie/client.py`: Implementation of the movie service server
-- `movie/movie.graphql`: GraphQL schema for the Movie service.
+- `movie/movie.py`: Implementation of the movie service server
 - `movie/requirements.txt`: Python dependencies for the movie service
 - `movie/data/movies.json`: JSON file containing movie data.
-- `movie/data/actors.json`: JSON file containing actor data.
+
 
 ### 3. Time Service
-The time service is responsible for managing the time slots that are available for booking. It is implemented using a
-*gRPC* server based on the *protobuf* definition implemented in *Python*.
+The time service is responsible for managing the time slots that are available for booking. 
 
-- `time/Dockerfile`: Containerization of the time service
-- `time/client.py`: Implementation of the time service server
-- `time/proto/`: Directory containing Protobuf definitions for communication.
-- `time/requirements.txt`: Python dependencies for the time service
-- `time/data/times.json`: JSON file containing time data.
+- `showtime/Dockerfile`: Containerization of the time service
+- `showtime/time.py`: Implementation of the time service server
+- `showtime/requirements.txt`: Python dependencies for the time service
+- `showtime/data/times.json`: JSON file containing time data.
 
 ### 4. User Service
-It is the entry point for the user to interact with the system. It is implemented using a *REST* server based on the
-*OpenAPI* definition implemented in *Python*. It have a direct access to movie and booking services and indirect access
-to time service.
+It is the entry point for the user to interact with the system.
 
 - `user/Dockerfile`: Containerization of the user service
-- `user/client.py`: Implementation of the user service server
+- `user/user.py`: Implementation of the user service server
 - `user/user.yaml`: OpenAPI definition for the user service.
 - `user/requirements.txt`: Python dependencies for the user service
 - `user/data/users.json`: JSON file containing user data.
+
+Since the user service has direct access to the movie and booking services, we can perform operations that modify the state of these services (add, update, delete).
+
+And since it doesn't have direct access to the times service, it can't perform any operation that directly modifies the state of showtimes. This is why we only perform data retrieval operations indirectly (via the booking service) when our entry point is user.
 
 ## Installation
 

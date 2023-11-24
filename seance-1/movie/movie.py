@@ -97,7 +97,7 @@ def del_movie(movieid):
     for movie in movies:
         if str(movie["id"]) == str(movieid):
             movies.remove(movie)
-            return make_response(jsonify(movie),200)
+            return make_response(jsonify({"message":"movie deleted"}),200)
 
     res = make_response(jsonify({"error":"movie ID not found"}),400)
     return res

@@ -240,7 +240,7 @@ def get_movies(user_id: str) -> Response:
    """
    update_user_last_active(user_id)
 
-   response = requests.get("http://movie:3200/movies")
+   response = requests.get("http://movie:3200/json")
 
    return make_response(jsonify(response.json()), response.status_code)
 
@@ -310,7 +310,37 @@ def update_movie_rating(user_id: str, movie_id: str, rating: str) -> Response:
    if not rating.isnumeric() or float(rating) < 0 or float(rating) > 10:
       return make_response(jsonify({"error": "Rating must be a number between 0 and 10"}), 400)
 
-   response = requests.put(f"http://movie:3200/movies/{movie_id}/rating/{rating}")
+   response = requests.put(f"http://movie:3200/movies/{movie_id}/{rating}")
+
+   return make_response(jsonify(response.json()), response.status_code)
+
+@app.route("/<user_id>/movies/<movie_id>", methods=['DELETE'])
+def delete_movie(user_id: str, movie_id: str) -> Response:
+   """
+   Delete a movie based on movie_id.
+
+   Notes
+   -----
+   This function sends a HTTP request to delete a specific movie from the movie service
+   based on the provided movie ID.
+
+   If the request is successful (status code 200), a success message is returned.
+
+   If the movie is not found, a 404 error is returned with an appropriate error message.
+
+   If there is an issue with the request, the response status code and error message from the movie service
+   are returned.
+
+   Parameters:
+   ----------
+   :param user_id: id of the user
+   :param movie_id: id of the movie
+
+   :return: Response object with the movie
+   """
+   update_user_last_active(user_id)
+
+   response = requests.delete(f"http://movie:3200/movies/{movie_id}")
 
    return make_response(jsonify(response.json()), response.status_code)
 
@@ -333,10 +363,26 @@ def get_bookings(user_id: str) -> Response:
    """
    update_user_last_active(user_id)
 
-   response =  requests.get(f"http://booking:3201/bookings/{user_id}")
+   response = requests.get(f"http://booking:3201/bookings/{user_id}")
 
+   if response.status_code == 200:
+      bookings = response.json()
+
+      for booking in bookings.get("dates", []):
+         movies = []
+         for movie_id in booking.get("movies", []):
+            response_movie = requests.get(f"http://movie:3200/movies/{movie_id}")
+
+            if response_movie.status_code == 200:
+               movies.append(response_movie.json())
+            else:
+               return make_response(jsonify({"error": "Movie not found"}), 404)
+         
+         booking["movies"] = movies
+
+      return make_response(jsonify(bookings), 200)
+      
    return make_response(jsonify(response.json()), response.status_code)
-
 @app.route("/<user_id>/bookings", methods=['POST'])
 def add_booking(user_id) -> Response:
    """

@@ -78,8 +78,8 @@ def add_booking(user_id: str) -> Response:
         if response_showtimes.status_code == 404:
             errors.append({"date": "Date not found"})
         else:
-            showtimes = response_showtimes.json()["showtimes"]
-            if "movie" in data and data["movie"] not in showtimes:
+            showtime = response_showtimes.json()
+            if "movie" in data and data["movie"] not in showtime["movies"]:
                 errors.append({"movie": "Movie not scheduled for this date"})
                 
 
